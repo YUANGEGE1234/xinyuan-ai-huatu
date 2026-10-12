@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "鑫源AI画图",
+  "productName": "XinYuanAI-Huatu",
   "version": "../package.json",
   "identifier": "com.xinyuanai.huatu",
   "build": {
