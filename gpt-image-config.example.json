@@ -1,0 +1,13 @@
+{
+  "profiles": [
+    {
+      "id": "xinyuan-default",
+      "name": "鑫源AI",
+      "provider": "openai",
+      "baseUrl": "https://yuangeluyou.com/v1",
+      "model": "gpt-image-2,gpt-image-2-all",
+      "apiMode": "images",
+      "isDefault": true
+    }
+  ]
+}

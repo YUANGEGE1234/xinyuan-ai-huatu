@@ -1,0 +1,26 @@
+{
+  "profiles": [
+    {
+      "id": "xinyuan-image",
+      "name": "图像配置",
+      "provider": "openai",
+      "baseUrl": "https://yuangeluyou.com/v1",
+      "model": "gpt-image-2,gpt-image-2-all",
+      "apiMode": "images",
+      "isDefault": true
+    },
+    {
+      "id": "xinyuan-agent-text",
+      "name": "Agent 文本配置",
+      "provider": "openai",
+      "baseUrl": "https://yuangeluyou.com/v1",
+      "model": "your-text-model",
+      "apiMode": "responses"
+    }
+  ],
+  "agent": {
+    "apiConfigMode": "hybrid",
+    "textProfileId": "xinyuan-agent-text",
+    "imageProfileId": "xinyuan-image"
+  }
+}

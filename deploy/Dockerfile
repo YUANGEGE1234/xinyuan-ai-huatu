@@ -1,0 +1,50 @@
+# ---- Build stage ----
+FROM --platform=$BUILDPLATFORM node:20-alpine AS build
+
+WORKDIR /app
+
+ENV VITE_DEFAULT_API_URL=__VITE_DEFAULT_API_URL_PLACEHOLDER__
+ENV VITE_API_PROXY_AVAILABLE=__VITE_API_PROXY_AVAILABLE_PLACEHOLDER__
+ENV VITE_API_PROXY_LOCKED=__VITE_API_PROXY_LOCKED_PLACEHOLDER__
+ENV VITE_DOCKER_DEPLOYMENT=__VITE_DOCKER_DEPLOYMENT_PLACEHOLDER__
+ENV VITE_DOCKER_LEGACY_API_URL_USED=__VITE_DOCKER_LEGACY_API_URL_USED_PLACEHOLDER__
+ENV VITE_SHOW_PRESET_CONFIG_ONLY=__VITE_SHOW_PRESET_CONFIG_ONLY_PLACEHOLDER__
+ENV VITE_LOCK_PRESET_CONFIG_PARAMS=__VITE_LOCK_PRESET_CONFIG_PARAMS_PLACEHOLDER__
+ENV VITE_PREVENT_PRESET_CONFIG_DELETION=__VITE_PREVENT_PRESET_CONFIG_DELETION_PLACEHOLDER__
+ENV VITE_DEFAULT_UI_FONT=__VITE_DEFAULT_UI_FONT_PLACEHOLDER__
+ENV VITE_DEFAULT_MONO_FONT=__VITE_DEFAULT_MONO_FONT_PLACEHOLDER__
+ENV VITE_BUILTIN_FONT_SOURCE=__VITE_BUILTIN_FONT_SOURCE_PLACEHOLDER__
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+# ---- Production stage ----
+FROM nginx:alpine
+
+ENV HOST=0.0.0.0
+ENV PORT=80
+# 默认使用镜像内置的鑫源AI预置配置；可用 -e DEFAULT_API_URL=... 覆盖为 API 地址或自定义配置文件路径
+ENV DEFAULT_API_URL=/config/xinyuan-presets.json
+ENV API_PROXY_URL=
+ENV ENABLE_API_PROXY=false
+ENV LOCK_API_PROXY=false
+ENV SHOW_PRESET_CONFIG_ONLY=false
+ENV LOCK_PRESET_CONFIG_PARAMS=false
+ENV PREVENT_PRESET_CONFIG_DELETION=false
+ENV DEFAULT_UI_FONT=
+ENV DEFAULT_MONO_FONT=
+ENV BUILTIN_FONT_SOURCE=
+
+COPY --from=build /app/dist /usr/share/nginx/html
+# 内置鑫源AI预置配置，容器启动时由 inject-api-url.sh 读取并嵌入页面
+COPY --from=build /app/xinyuan-presets.json /config/xinyuan-presets.json
+COPY deploy/nginx.conf /etc/nginx/templates/default.conf.template
+COPY --chmod=755 deploy/migrate-api-env.envsh /docker-entrypoint.d/05-migrate-api-env.envsh
+COPY --chmod=755 deploy/inject-api-url.sh /docker-entrypoint.d/40-inject-api-url.sh
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

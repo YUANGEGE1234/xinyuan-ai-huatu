@@ -1,0 +1,15 @@
+{
+  "profiles": [
+    {
+      "id": "xinyuan-default",
+      "name": "鑫源AI",
+      "description": "鑫源AI 中转站画图专用配置，支持 `gpt-image-2`、`gpt-image-2-all` 等图片模型。\n\n还没有 API Key？前往 [鑫源AI](https://yuangeluyou.com/register) 注册，并在「令牌」页面创建一个令牌后填入。",
+      "provider": "openai",
+      "baseUrl": "https://yuangeluyou.com/v1",
+      "model": "gpt-image-2,gpt-image-2-all,gpt-image-1.5,gpt-image-1,gpt-image-1-all",
+      "apiMode": "images",
+      "isDefault": true,
+      "transparentBackgroundMethod": "local"
+    }
+  ]
+}

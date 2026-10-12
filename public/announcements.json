@@ -1,0 +1,9 @@
+[
+  {
+    "id": "2026-10-xinyuan-welcome",
+    "title": "欢迎使用鑫源AI画图",
+    "content": "本工具由 **鑫源AI** 提供，已内置鑫源AI 中转站配置。\n\n打开「设置 → API 配置」，填入在 [鑫源AI](https://yuangeluyou.com/register) 创建的令牌，即可开始画图。",
+    "note": "所有记录与图片只保存在本机，不会上传到任何服务器。",
+    "action": { "label": "前往鑫源AI 注册", "url": "https://yuangeluyou.com/register" }
+  }
+]
